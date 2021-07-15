@@ -1,0 +1,93 @@
+﻿<Window x:Class="WorkersApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkersApp"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="WorkersApp" Height="450" Width="800">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoad}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Background="{Binding BackColor}"/>
+        <TextBox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,10,0" Width="auto" Text="Lista Pracowników:" FontSize="20" Foreground="{Binding TextColor}" Background="{Binding BackColor}" BorderThickness="0"/>
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Margin="10,10,10,30" Foreground="{Binding TextColor}" Background="{Binding BackColor}"
+               ItemsSource="{Binding WorkersList}"   RowBackground="{Binding BackColor}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedRow}" CanUserAddRows="False" IsReadOnly="True" HeadersVisibility="Column">
+            
+            <DataGrid.Resources>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="CornflowerBlue" />
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="1,1,1,1"/>
+                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="1,1,0,0"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="Background" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
+                <DataGridTextColumn Header="Imię" Binding="{Binding Path=FirstName}"/>
+                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Path=LastName}"/>
+                <DataGridTextColumn Header="Liczba niezakończonych zadań" Binding="{Binding Path=NumberOfTasks}" >
+                    
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.Header>
+                        <Button Background="CornflowerBlue" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.AddNewWorker}">
+                            <StackPanel>
+                                <Image Source="plus.png" MaxHeight="30" MaxWidth="30"/>
+                            </StackPanel>
+                        </Button>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.DeleteWorker}" Background="CornflowerBlue">
+                                <StackPanel>
+                                    <Image Source="minus.png" MaxWidth="30" MaxHeight="30"/>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,10,10,0" HorizontalAlignment="Center" Width="auto" Text="Szczegóły pracownika:" FontSize="20" FontWeight="Bold" BorderThickness="0"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0" HorizontalAlignment="Center" Width="auto" Text="{Binding IdentyfikatorText}" FontSize="16" BorderThickness="0"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="0" HorizontalAlignment="Center" Width="auto" Text="{Binding DaneText}" FontSize="16" BorderThickness="0"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="0" HorizontalAlignment="Center" Width="auto" Text="Lista zadań:" FontSize="16" BorderThickness="0"/>
+        <DataGrid Grid.Row="4" Grid.Column="1" Margin="20,5,20,40" Width="auto" IsReadOnly="True" CanUserAddRows="False" ItemsSource="{Binding TasksList}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
+                <DataGridTextColumn Header="Kategoria zadania" Binding="{Binding Path=TaskCategory}"/>
+                <DataGridTextColumn Header="Opis zadania" Binding="{Binding Path=TaskDescription}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+    </Grid>
+</Window>
